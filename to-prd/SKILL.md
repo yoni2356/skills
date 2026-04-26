@@ -1,9 +1,23 @@
 ---
 name: to-prd
-description: Turn the current conversation context into a PRD and store in ~/Documents/issues/. Use when user wants to create a PRD from the current context.
+description: Turn the current conversation context into a PRD and store it according to the project's configured storage backend. Use when user wants to create a PRD from the current context.
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a PRD. Do NOT interview the user — just synthesize what you already know.
+# To PRD
+
+Takes the current conversation context and codebase understanding and produces a PRD. Do NOT interview the user — just synthesize what you already know.
+
+## Storage Backend
+
+Before doing anything, read `.claude/issues.json` from the project root. Use the `backend` field to determine where to store output:
+
+- **`local`**: write the PRD to `{prds_path}/{kebab-title}.md`
+- **`obsidian`**: write the PRD to `{vault}/{prds_folder}/{kebab-title}.md`
+- **`github`**: write the PRD to `temp/prds/{kebab-title}.md` (GitHub has no native PRD concept; store locally)
+
+If `.claude/issues.json` does not exist, fall back to writing to `temp/prds/`.
+
+Create the target directory if it does not exist.
 
 ## Process
 
@@ -70,3 +84,5 @@ A description of the things that are out of scope for this PRD.
 Any further notes about the feature.
 
 </prd-template>
+
+4. Write the PRD to the configured backend path and print the full path of the file created.
